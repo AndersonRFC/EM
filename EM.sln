@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EM.Web", "EM.Web\EM.Web.csproj", "{E5EF680B-6D3E-4F16-AF89-3F085FBE7021}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EM.Domain", "EM.Domain\EM.Domain.csproj", "{E9C2D07F-97EB-46E2-9CF5-87350FE2109D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EM.Repository", "EM.Repository\EM.Repository.csproj", "{37B33192-55A8-4642-A2AF-C09665F35C94}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5EF680B-6D3E-4F16-AF89-3F085FBE7021}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5EF680B-6D3E-4F16-AF89-3F085FBE7021}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5EF680B-6D3E-4F16-AF89-3F085FBE7021}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5EF680B-6D3E-4F16-AF89-3F085FBE7021}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9C2D07F-97EB-46E2-9CF5-87350FE2109D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9C2D07F-97EB-46E2-9CF5-87350FE2109D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9C2D07F-97EB-46E2-9CF5-87350FE2109D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9C2D07F-97EB-46E2-9CF5-87350FE2109D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37B33192-55A8-4642-A2AF-C09665F35C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37B33192-55A8-4642-A2AF-C09665F35C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37B33192-55A8-4642-A2AF-C09665F35C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37B33192-55A8-4642-A2AF-C09665F35C94}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B2F85C8-9409-476E-AE08-DF1A966C1E80}
+	EndGlobalSection
+EndGlobal

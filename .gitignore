@@ -1,0 +1,7 @@
+.vs/
+EM.Domain/bin/
+EM.Domain/obj/
+EM.Repository/bin/
+EM.Repository/obj/
+EM.Web/bin/
+EM.Web/obj/
