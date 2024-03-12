@@ -5,13 +5,13 @@ namespace EM.Repository.Repositories;
 
 public abstract class RepositorioAbstrato<T> where T : IEntidade
 {
-    public abstract void Add(T entidade);
+    public abstract Task AddAsync(T entidade);
 
-    public abstract void Update(T entidade);
+    public abstract Task UpdateAsync(T entidade);
 
-    public abstract void Remove(T entidade);
+    public abstract Task RemoveAsync(T entidade);
 
-    public abstract IEnumerable<T> GetAll();
+    public abstract Task<IEnumerable<T>> GetAllAsync();
 
-    public abstract IEnumerable<T> Get(Expression<Func<T, bool>> predicate);
+    public abstract Task<IEnumerable<T>> GetAsync(Expression<Func<T, bool>> predicate);
 }

@@ -13,7 +13,7 @@ public class AlunoController : Controller
         _alunoRepository = alunoRepository;
     }
 
-    public IActionResult Index(string searchString, string searchType)
+    public async Task<IActionResult> Index(string searchString, string searchType)
     {
         IEnumerable<Aluno> alunos = new List<Aluno>();
 
@@ -25,7 +25,7 @@ public class AlunoController : Controller
                 {
                     if (int.TryParse(searchString, out int id))
                     {
-                        var alunoPesquisado = _alunoRepository.GetByMatricula(id);
+                        var alunoPesquisado = await _alunoRepository.GetByMatricula(id);
                         if (alunoPesquisado is not null)
                         {
                             ((List<Aluno>)alunos).Add(alunoPesquisado);
@@ -35,12 +35,12 @@ public class AlunoController : Controller
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
-                    alunos = _alunoRepository.GetAll();
+                    alunos = await _alunoRepository.GetAllAsync();
                 }
             }
             else if (searchType == "nome")
             {
-                alunos = _alunoRepository.GetByContendoNoNome(searchString);
+                alunos = await _alunoRepository.GetByContendoNoNome(searchString);
             }
             else
             {
@@ -49,7 +49,7 @@ public class AlunoController : Controller
         }
         else
         {
-            alunos = _alunoRepository.GetAll();
+            alunos = await _alunoRepository.GetAllAsync();
         }
 
         var alunoViewModel = new AlunoViewModel
@@ -63,13 +63,13 @@ public class AlunoController : Controller
     }
 
     [HttpPost]
-    public IActionResult Cadastrar(Aluno aluno)
+    public async Task<IActionResult> Cadastrar(Aluno aluno)
     {
         if (ModelState.IsValid)
         {
             try
             {
-                _alunoRepository.Add(aluno);
+                await _alunoRepository.AddAsync(aluno);
             }
             catch (Exception)
             {
@@ -82,7 +82,7 @@ public class AlunoController : Controller
 
     }
 
-    public IActionResult Editar(int? id)
+    public async Task<IActionResult> Editar(int? id)
     {
         if(id == null)
         {
@@ -90,7 +90,7 @@ public class AlunoController : Controller
         }
         else
         {
-            var aluno = _alunoRepository.GetByMatricula((int)id);
+            var aluno = await _alunoRepository.GetByMatricula((int)id);
             if(aluno == null)
             {
                 return NotFound();
@@ -102,7 +102,7 @@ public class AlunoController : Controller
 
 
     [HttpPost]
-    public IActionResult Editar(int id, Aluno aluno)
+    public async Task<IActionResult> Editar(int id, Aluno aluno)
     {
         if(id != aluno.Matricula)
         {
@@ -113,7 +113,7 @@ public class AlunoController : Controller
         {
             try
             {
-                _alunoRepository.Update(aluno);
+                await _alunoRepository.UpdateAsync(aluno);
             }
             catch(Exception)
             {
@@ -126,14 +126,14 @@ public class AlunoController : Controller
         return View(aluno);
     }
 
-    public IActionResult Excluir(int? id)
+    public async Task<IActionResult> Excluir(int? id)
     {
         if(id == null)
         {
             return NotFound();
         }
 
-        var aluno = _alunoRepository.GetByMatricula((int)id);
+        var aluno = await _alunoRepository.GetByMatricula((int)id);
 
         if(aluno == null)
         {
@@ -144,9 +144,9 @@ public class AlunoController : Controller
     }
 
     [HttpPost, ActionName("Excluir")]
-    public IActionResult ExcluirConfirmado(int id)
+    public async Task<IActionResult> ExcluirConfirmado(int id)
     {
-        _alunoRepository.Remove(new Aluno { Matricula = id });
+        await _alunoRepository.RemoveAsync(new Aluno { Matricula = id });
 
         return RedirectToAction(nameof(Index));
     }

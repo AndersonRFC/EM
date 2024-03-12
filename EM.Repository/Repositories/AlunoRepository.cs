@@ -13,7 +13,7 @@ public class AlunoRepository : RepositorioAbstrato<Aluno>
         _connection = connection;
     }
 
-    public Aluno? GetByMatricula(int matricula)
+    public async Task<Aluno?> GetByMatricula(int matricula)
     {
         Aluno? aluno = null;
 
@@ -22,11 +22,11 @@ public class AlunoRepository : RepositorioAbstrato<Aluno>
         using (FbCommand command = new(sql, _connection))
         {
             command.Parameters.AddWithValue("@Matricula", matricula);
-            _connection.Open();
+            await _connection.OpenAsync();
 
-            using (FbDataReader reader = command.ExecuteReader())
+            using (FbDataReader reader = await command.ExecuteReaderAsync())
             {
-                if (reader.Read())
+                if (await reader.ReadAsync())
                 {
                     aluno = new Aluno()
                     {
@@ -43,7 +43,8 @@ public class AlunoRepository : RepositorioAbstrato<Aluno>
         return aluno;
     }
 
-    public IEnumerable<Aluno> GetByContendoNoNome(string parteDoNome)
+
+	public async Task<IEnumerable<Aluno>> GetByContendoNoNome(string parteDoNome)
     {
         List<Aluno> alunos = [];
 
@@ -52,11 +53,11 @@ public class AlunoRepository : RepositorioAbstrato<Aluno>
         using(FbCommand command = new(sql, _connection))
         {
             command.Parameters.AddWithValue("@ParteDoNome", "%" + parteDoNome.ToLower() + "%");
-            _connection.Open();
+            await _connection.OpenAsync();
 
-            using (FbDataReader reader = command.ExecuteReader())
+            using (FbDataReader reader = await command.ExecuteReaderAsync())
             {
-                while(reader.Read())
+                while(await reader.ReadAsync())
                 {
                     alunos.Add( new Aluno()
                     {
@@ -73,7 +74,7 @@ public class AlunoRepository : RepositorioAbstrato<Aluno>
         return alunos;
     }
 
-    public override void Add(Aluno aluno)
+    public override async Task AddAsync(Aluno aluno)
     {
         string sql = "INSERT INTO ALUNO (NOME, CPF, NASCIMENTO, SEXO) VALUES (@Nome, @CPF, @Nascimento, @Sexo);";
     
@@ -84,18 +85,21 @@ public class AlunoRepository : RepositorioAbstrato<Aluno>
             command.Parameters.AddWithValue("@Nascimento", aluno.Nascimento.ToString("yyyy-MM-dd"));
             command.Parameters.AddWithValue("@Sexo", aluno.Sexo == EnumeradorSexo.Masculino ? 0 : 1);
 
-            _connection.Open();
-            command.ExecuteNonQuery();
+            await _connection.OpenAsync();
+            await command.ExecuteNonQueryAsync();
             _connection.Close();
         }
     }
 
-    public override IEnumerable<Aluno> Get(Expression<Func<Aluno, bool>> predicate)
+
+    public override async Task<IEnumerable<Aluno>> GetAsync(Expression<Func<Aluno, bool>> predicate)
     {
-        return GetAll().Where(predicate.Compile());
+        var allAlunos = await GetAllAsync();
+        return allAlunos.Where(predicate.Compile());
     }
 
-    public override IEnumerable<Aluno> GetAll()
+
+    public override async Task<IEnumerable<Aluno>> GetAllAsync()
     {
         List<Aluno> alunos = [];
 
@@ -103,11 +107,11 @@ public class AlunoRepository : RepositorioAbstrato<Aluno>
 
         using(FbCommand command = new(sql, _connection))
         {
-            _connection.Open();
+            await _connection.OpenAsync();
 
-            using(FbDataReader reader = command.ExecuteReader())
+            using(FbDataReader reader = await command.ExecuteReaderAsync())
             {
-                while (reader.Read())
+                while (await reader.ReadAsync())
                 {
                     alunos.Add(new Aluno()
                     {
@@ -124,7 +128,8 @@ public class AlunoRepository : RepositorioAbstrato<Aluno>
         return alunos;
     }
 
-    public override void Update(Aluno aluno)
+
+    public override async Task UpdateAsync(Aluno aluno)
     {
         string sql = "UPDATE ALUNO SET NOME = @Nome, CPF = @Cpf, NASCIMENTO = @Nascimento, SEXO = @Sexo WHERE MATRICULA = @Matricula;";
 
@@ -137,23 +142,23 @@ public class AlunoRepository : RepositorioAbstrato<Aluno>
 
             command.Parameters.AddWithValue("@Matricula", aluno.Matricula);
 
-            _connection.Open();
-            command.ExecuteNonQuery();
+            await _connection.OpenAsync();
+            await command.ExecuteNonQueryAsync();
             _connection.Close();
         }
     }
 
-    public override void Remove(Aluno aluno)
+
+    public override async Task RemoveAsync(Aluno aluno)
     {
-        Console.WriteLine("passou no delete");
         string sql = "DELETE FROM ALUNO WHERE MATRICULA = @Matricula;";
 
         using (FbCommand command = new(sql, _connection))
         {
             command.Parameters.AddWithValue("@Matricula", aluno.Matricula);
 
-            _connection.Open();
-            command.ExecuteNonQuery();
+            await _connection.OpenAsync();
+            await command.ExecuteNonQueryAsync();
             _connection.Close();
         }
     }
