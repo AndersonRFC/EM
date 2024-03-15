@@ -1,4 +1,5 @@
 ﻿using EM.Domain.Models;
+using EM.Domain.Utilitary;
 using EM.Repository.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -150,4 +151,54 @@ public class AlunoController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+	//só gera
+	//public async void Imprime()
+	//{
+	//    var listaDeAlunos = await _alunoRepository.GetAllAsync();
+	//    iText.GerarRelatorioPDF(listaDeAlunos.Count(), listaDeAlunos.ToList());
+	//}
+
+	//gera e baixa
+	//public async Task<IActionResult> Imprime()
+	//{
+	//	var listaDeAlunos = await _alunoRepository.GetAllAsync();
+	//	var filePath = iText.GerarRelatorioPDF(listaDeAlunos.Count(), listaDeAlunos.ToList());
+
+	//	// Verifica se o arquivo existe
+	//	if (System.IO.File.Exists(filePath))
+	//	{
+	//		var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+	//		var contentType = "application/pdf";
+	//		var fileDownloadName = "relatorio.pdf"; // Nome do arquivo que será baixado pelo cliente
+
+	//		return File(fileStream, contentType, fileDownloadName);
+	//	}
+	//	else
+	//	{
+	//		// Se o arquivo não existir, retorna um erro 404
+	//		return NotFound();
+	//	}
+	//}
+
+
+	public async Task<IActionResult> Imprime()
+	{
+		var listaDeAlunos = await _alunoRepository.GetAllAsync();
+		var filePath = iText.GerarRelatorioPDF(listaDeAlunos.Count(), listaDeAlunos.ToList());
+
+		// Verifica se o arquivo existe
+		if (System.IO.File.Exists(filePath))
+		{
+			var fileBytes = System.IO.File.ReadAllBytes(filePath);
+			var contentType = "application/pdf";
+
+			return File(fileBytes, contentType);
+		}
+		else
+		{
+			// Se o arquivo não existir, retorna um erro 404
+			return NotFound();
+		}
+	}
 }
